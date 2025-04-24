@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Brancher Proxy</title>
+  <style>
+    html, body {
+      margin:0; padding:0; height:100%; overflow:hidden;
+      user-select:none; -webkit-user-select:none; -ms-user-select:none;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+  <script>
+    // URL real ofuscada en Base64
+    const url = atob('aHR0cHM6Ly9hcHAuYnJhbmNoZXIuYWkvNmNkZDYyM2ItYzEzMi00YzM4LWE0MDgtY2FlOGE2ZTlkMTVl');
+    // Intentamos cargar la página y reescribir el documento
+    fetch(url)
+      .then(res => res.text())
+      .then(html => {
+        document.open();
+        document.write(html);
+        document.close();
+      })
+      .catch(err => {
+        // Si falla (CORS), caemos a un iframe
+        const f = document.createElement('iframe');
+        f.src = url;
+        f.style.cssText = 'border:0;width:100%;height:100%';
+        f.setAttribute('sandbox','allow-scripts allow-same-origin');
+        document.body.appendChild(f);
+      });
+  </script>
+</body>
+</html>
